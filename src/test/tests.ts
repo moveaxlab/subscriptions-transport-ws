@@ -289,6 +289,8 @@ describe('Client', function () {
 
         if (parsedMessage.type === MessageTypes.GQL_START) {
           subscriptionsCount++;
+        } else if (parsedMessage.type === MessageTypes.GQL_CONNECTION_INIT) {
+          connection.send(JSON.stringify({ type: MessageTypes.GQL_CONNECTION_ACK }));
         }
       });
     });
@@ -856,6 +858,10 @@ describe('Client', function () {
             id: parsedMessage.id,
             payload,
           }));
+        } else if (parsedMessage.type === MessageTypes.GQL_CONNECTION_INIT) {
+          connection.send(JSON.stringify({
+            type: MessageTypes.GQL_CONNECTION_ACK,
+          }));
         }
       });
     });
@@ -1013,6 +1019,8 @@ describe('Client', function () {
             sub.unsubscribe();
             done();
           }
+        } else if (parsedMessage.type === MessageTypes.GQL_CONNECTION_INIT) {
+          connection.send(JSON.stringify({ type: MessageTypes.GQL_CONNECTION_ACK }));
         }
       });
     });
